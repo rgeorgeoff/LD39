@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: bdbe2ce61ce2adc438976a4cbeeffdf0
+timeCreated: 1501370825
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Zilap Sleep
+  fontNames:
+  - Zilap Sleep
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
