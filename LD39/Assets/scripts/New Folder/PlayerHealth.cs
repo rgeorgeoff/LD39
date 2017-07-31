@@ -6,7 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {	
 	public float maxHealth = 100f;
 	public float health = 100f;					// The player's health.
-	private float damagePerSec = 0f;		// How frequently the player can be damaged.s
+	private float damagePerSec = 8f;		// How frequently the player can be damaged.s
 	public AudioClip[] ouchClips;				// Array of clips to play when the player is damaged.
 	public float hurtForce = 10f;				// The force with which the player is pushed when hurt.
 	public float damageAmount = 10f;			// The amount of damage to take when enemies touch the player
@@ -23,29 +23,36 @@ public class PlayerHealth : MonoBehaviour
 	private float deadLightIntensity = 0f;
 	private float deadLightRange = 0f;
 
-	public GameObject fireObj;
-
-	public GameObject deadCanvas;
-
 	private bool died = false;
+
+	public SpriteRenderer bodySR;
+	public RespawnHandler rspnH;
 
 	void Awake ()
 	{
 		// Setting up references.
 		playerControl = GetComponent<PlayerControl>();
 		anim = GetComponent<Animator>();
+		//rspnH = GameObject.FindGameObjectWithTag ("networkManager").GetComponent<RespawnHandler> ();
 	}
 
 	void Update ()
 	{
+		
 		//slowly kill the player, and dim light accordingly IFFFF ... blah blah blah
 		health -= Time.deltaTime * damagePerSec;
 		myLight.intensity = Mathf.Lerp (maxLightIntensity, deadLightIntensity, 1-(health / maxHealth));
 		myLight.range = Mathf.Lerp (maxLightRange, deadLightRange, 1-(health / maxHealth));
+		if (rspnH == null) {
+			GameObject rspnHGO = GameObject.FindGameObjectWithTag ("neededStuff");
+			if (rspnHGO != null) {
+				rspnH = rspnHGO.GetComponent<RespawnHandler> ();
+			}
+		}
 
-		if (health < 0 && !died) {
-			killPlayer ();
-			died = true;
+		if (rspnH != null && health < 0 && !rspnH.IsDead()) {
+			string[] hints = new string[]{ "Recharge at your teams bonfires to not die!", "Your Death is not in vein!, you became a bonfire beacon for your team!"};
+			killPlayer (0, "No More Energy!", hints[Random.Range(0,hints.Length)]);
 		}
 	}
 
@@ -115,14 +122,10 @@ public class PlayerHealth : MonoBehaviour
 		AudioSource.PlayClipAtPoint(ouchClips[i], transform.position);
 	}
 
-	void killPlayer(){
-		playerControl.maxSpeed = 0;
-		playerControl.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
-		playerControl.GetComponent<Rigidbody2D> ().gravityScale = 0;
-		//spawn the fire Object
-		GameObject g =  Instantiate(fireObj, this.transform.position, Quaternion.identity);
-		//message popup!
-		Instantiate(deadCanvas);
+	public bool dead;
+
+	public void killPlayer(int deathCause, string reason, string hint){
+		rspnH.Kill (deathCause, playerControl, bodySR, this, reason, hint);
 
 	}
 

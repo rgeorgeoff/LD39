@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using UnityEngine.Experimental.UIElements;
+using UnityEngine.Networking;
 
 public class ToNextSceneButtonScript : MonoBehaviour {
 
@@ -15,11 +16,21 @@ public class ToNextSceneButtonScript : MonoBehaviour {
 	public UnityEngine.UI.Toggle blue;
 	public UnityEngine.UI.Toggle red;
 	public GameObject colorHint;
+	public MyHud m;
+	UnityEngine.UI.Button btn;
+	public Text buttonText;
 
 	void Start()
 	{
-		UnityEngine.UI.Button btn = myButton.GetComponent<UnityEngine.UI.Button>();
+		btn = myButton.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(OnFirstButtonClick);
+	}
+
+	void Update()
+	{
+		if (m.ready) {
+			buttonText.text = "PLAY!";
+		}
 	}
 
 	public void OnFirstButtonClick(){
@@ -36,7 +47,7 @@ public class ToNextSceneButtonScript : MonoBehaviour {
 			StaticVarScript.changeName(tf.GetComponent<InputField>().text);
 			if (red.isOn)
 				StaticVarScript.changeTeam (1);
-			SceneManager.LoadScene(1);
+			m.ConnectToMatch ();
 		}
 	}
 }

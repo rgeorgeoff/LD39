@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : NetworkBehaviour
 {
 	[HideInInspector]
 	public bool facingRight = true;			// For determining which way the player is currently facing.
@@ -10,40 +11,98 @@ public class PlayerControl : MonoBehaviour
 
 
 	public float moveForce = 465f;			// Amount of force added to move the player left and right.
-	public float maxSpeed = 5f;				// The fastest the player can travel in the x axis.
+	public float maxSpeed = 10f;				// The fastest the player can travel in the x axis.
 	public AudioClip[] jumpClips;			// Array of clips for when the player jumps.
 	public float jumpForce = 1000f;			// Amount of force added when the player jumps.
 	public AudioClip[] taunts;				// Array of clips for when the player taunts.
 	//public float tauntProbability = 50f;	// Chance of a taunt happening.
 	//public float tauntDelay = 1f;			// Delay for when the taunt should happen.
-
+	private float maxSpeedReset = 10f;
 
 	private int tauntIndex;					// The index of the taunts array indicating the most recent taunt.
 	private Transform groundCheck;			// A position marking where to check if the player is grounded.
 	private bool grounded = false;			// Whether or not the player is grounded.
 	public Animator anim;					// Reference to the player's animator component.
+	public bool dead = false;
 
+	public Light mlight;
+	public SpriteRenderer bodyRenderer;
+
+	private ServerPixelHandler sph;
+
+	[SyncVar]
+	public int team = 2;
 
 	void Awake()
 	{
 		// Setting up references.
-		groundCheck = transform.Find("groundCheck");
+		groundCheck = transform.Find ("groundCheck");
+
 	}
 
 
+	[Command]
+	void CmdSetTeam(int team)
+	{
+		Debug.Log ("Got Comamnd" + team);
+		this.team = team;
+		anim.SetInteger ("team", team);
+	}
+
+	[Command]
+	public void CmdSetColor(int team, Vector2 pixelV)
+	{
+		Debug.Log ("Got Comamnd for pixel!" + team + pixelV);
+		if (isServer) {
+			if (!sph) {
+				sph = GameObject.FindGameObjectWithTag ("neededStuff").GetComponent<ServerPixelHandler> ();
+			} 
+			if (sph) {
+				sph.SetColorFor (pixelV, team);
+			}
+		}
+	}
+
+	public override void OnStartLocalPlayer ()
+	{
+		team = StaticVarScript.team;
+		anim.SetInteger ("team", team);
+		base.OnStartLocalPlayer ();
+		this.gameObject.tag = "Player";
+		this.gameObject.name = "myGuy";
+		PlayerHealth h = this.gameObject.AddComponent<PlayerHealth> ();
+		h.myLight = mlight;
+		h.bodySR = bodyRenderer;
+	}
+
+	void Start()
+	{
+		if(!isLocalPlayer)
+			anim.SetInteger ("team", team);
+		CmdSetTeam (StaticVarScript.team);
+	}
+
 	void Update()
 	{
+		if (!isLocalPlayer || dead)
+			return;
 		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
 		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
-
+		team = StaticVarScript.team;
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded)
 			jump = true;
 	}
 
+	public void ResetMaxSpeed()
+	{
+		maxSpeed = maxSpeedReset;
+	}
 
 	void FixedUpdate ()
 	{
+		if (!isLocalPlayer || dead)
+			return;
 		// Cache the horizontal input.
 		float h = Input.GetAxis("Horizontal");
 
@@ -73,7 +132,7 @@ public class PlayerControl : MonoBehaviour
 		if(jump)
 		{
 			// Set the Jump animator trigger parameter.
-			anim.SetTrigger("Jump");
+			//anim.SetTrigger("Jump");
 
 			// Play a random jump audio clip.
 			int i = Random.Range(0, jumpClips.Length);

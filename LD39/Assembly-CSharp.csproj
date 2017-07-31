@@ -51,16 +51,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AutoJoin.cs" />
+     <Compile Include="Assets\ClientSpawner.cs" />
      <Compile Include="Assets\DeathCanvas.cs" />
      <Compile Include="Assets\Fire.cs" />
      <Compile Include="Assets\Flicker.cs" />
      <Compile Include="Assets\PanUpAndFade.cs" />
+     <Compile Include="Assets\RespawnHandler.cs" />
+     <Compile Include="Assets\RotateFree.cs" />
+     <Compile Include="Assets\ScoreKeeper.cs" />
      <Compile Include="Assets\scripts\DeathLocation.cs" />
      <Compile Include="Assets\scripts\LevelSpawner.cs" />
+     <Compile Include="Assets\scripts\MasterServer\Master.cs" />
+     <Compile Include="Assets\scripts\MasterServer\NetworkMasterClient.cs" />
+     <Compile Include="Assets\scripts\MasterServer\NetworkMasterServer.cs" />
+     <Compile Include="Assets\scripts\MyHud.cs" />
      <Compile Include="Assets\scripts\New Folder\BackgroundParallax.cs" />
      <Compile Include="Assets\scripts\New Folder\BackgroundPropSpawner.cs" />
      <Compile Include="Assets\scripts\New Folder\Bomb.cs" />
-     <Compile Include="Assets\scripts\New Folder\BombPickup.cs" />
      <Compile Include="Assets\scripts\New Folder\CameraFollow.cs" />
      <Compile Include="Assets\scripts\New Folder\Destroyer.cs" />
      <Compile Include="Assets\scripts\New Folder\Enemy.cs" />
@@ -70,6 +78,7 @@
      <Compile Include="Assets\scripts\New Folder\LayBombs.cs" />
      <Compile Include="Assets\scripts\New Folder\Pauser.cs" />
      <Compile Include="Assets\scripts\New Folder\PickupSpawner.cs" />
+     <Compile Include="Assets\scripts\New Folder\PixelPickup.cs" />
      <Compile Include="Assets\scripts\New Folder\PlayerHealth.cs" />
      <Compile Include="Assets\scripts\New Folder\Remover.cs" />
      <Compile Include="Assets\scripts\New Folder\Rocket.cs" />
@@ -81,6 +90,7 @@
      <Compile Include="Assets\scripts\PlayerControl.cs" />
      <Compile Include="Assets\scripts\staticVarScript.cs" />
      <Compile Include="Assets\scripts\ToNextSceneButtonScript.cs" />
+     <Compile Include="Assets\ServerPixelHandler.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Unity535f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

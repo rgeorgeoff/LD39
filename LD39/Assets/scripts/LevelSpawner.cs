@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class LevelSpawner : MonoBehaviour {
+public class LevelSpawner : MonoBehaviour{
 
 	public GameObject[] ourBlocks;
 	public GameObject fire;
@@ -22,26 +23,21 @@ public class LevelSpawner : MonoBehaviour {
 
 	public List<DeathLocation> deathLocations = new List<DeathLocation> ();
 	private GameObject levelObjectParent;
+
+	private GameObject fireObjectParent;
+
 	public List<Vector2> spawnedLocations = new List<Vector2>();
 	private GameObject player;
 
-
-	void Awake(){
-		Random.InitState (867893434);
-		//if possible connect to server and get the data of all deaths (between ranges?)
-		widthQuadrent = pieceWidth * width;
-		heightQuadrent = pieceHeightGap * depth;
-
-		levelObjectParent = new GameObject();
-		www = new WWW(StaticVarScript.url + "getData.php");
-		DisplayDownloadMessage(true);
-		StartCoroutine("DownLoader");
-		player = GameObject.FindGameObjectWithTag ("Player");
-
-	}
+	private PlayerControl pc;
 
 	// Use this for initialization of our level
 	void Start () {
+		levelObjectParent = new GameObject();
+		widthQuadrent = pieceWidth * width;
+		heightQuadrent = pieceHeightGap * depth;
+		DownloadAndSpawnFires();
+		SpawnPlatforms (new Vector3 (0, 0, 0));
 		/*
 		Make the initial cell the current cell and mark it as visited
 		While there are unvisited cells
@@ -53,12 +49,17 @@ public class LevelSpawner : MonoBehaviour {
 		Else if stack is not empty
 			Pop a cell from the stack
 			Make it the current cell
-			*/
+		*/
+
 	}
 
 	void SpawnPlatforms (Vector3 pos)
 	{
-		
+		int a = (int)pos.x;
+		int b = (int)pos.y;
+		Random.InitState( a*45 + b * 23 + (a-b*3)*30 );
+		if(levelObjectParent == null)
+			levelObjectParent = new GameObject();
 		for (int y = 0; y < depth; y++) {
 			int removeMe = Random.Range (0, (int)width);
 			for (int x = 0; x < width; x++) {
@@ -76,7 +77,21 @@ public class LevelSpawner : MonoBehaviour {
 			float x = Random.Range (0, width);
 			float y = Random.Range (0, depth);
 			GameObject o = Instantiate (pixel, new Vector3 ((x - width / 2) * pieceWidth + pos.x * widthQuadrent, -y * pieceHeightGap + pos.y * heightQuadrent + 1.2f, 0), Quaternion.identity);
+			o.GetComponent<PixelPickup> ().posx = (int)pos.x;
+			o.GetComponent<PixelPickup> ().posy = (int)pos.y;
+			NetworkServer.Spawn (o);
+
 		}
+	}
+
+	float TimeToRefreshFire;
+	float refreshTime = 10;
+	public void DownloadAndSpawnFires()
+	{
+		TimeToRefreshFire = Time.time + refreshTime;
+		www = new WWW(StaticVarScript.url + "getData.php");
+		DisplayDownloadMessage(true);
+		StartCoroutine("DownLoader");
 	}
 
 	IEnumerator DownLoader()
@@ -87,21 +102,34 @@ public class LevelSpawner : MonoBehaviour {
 		SpawnDeathLocations ();
 		readyToPlay = true;
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
-		float posx = player.transform.position.x;
-		float posy = player.transform.position.y;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				Vector2 v = new Vector2 (Mathf.Floor(posx / widthQuadrent) - j + 1, Mathf.Floor(posy / heightQuadrent) - i + 1);
-				if(!spawnedLocations.Contains(v))
-				{
-					spawnedLocations.Add (v);
-					SpawnPlatforms (v);
-					SpawnPixel(v);
+		
+		if (!player) {
+			player = GameObject.FindGameObjectWithTag ("Player");
+			if(player)
+				pc = player.GetComponent<PlayerControl> ();
+		}
+		else {
+			float posx = player.transform.position.x;
+			float posy = player.transform.position.y;
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					Vector2 v = new Vector2 (Mathf.Floor (posx / widthQuadrent) - j + 1, Mathf.Floor (posy / heightQuadrent) - i + 1);
+					if (!spawnedLocations.Contains (v)) {
+						spawnedLocations.Add (v);
+						SpawnPlatforms (v);
+						if(pc.isServer)
+							SpawnPixel (v);
+					}
 				}
 			}
+		}
+		if (TimeToRefreshFire < Time.time) {
+			DownloadAndSpawnFires ();
 		}
 
 	}
@@ -113,22 +141,30 @@ public class LevelSpawner : MonoBehaviour {
 
 	void SpawnDeathLocations ()
 	{
+		if (fireObjectParent) {
+			GameObject temp = fireObjectParent;
+			Destroy (temp);
+		}
+		fireObjectParent = new GameObject ();
 		foreach (DeathLocation d in deathLocations)
 		{
 			GameObject f = Instantiate (fire, new Vector3 (d.x, d.y), Quaternion.identity);
+			f.transform.SetParent (fireObjectParent.transform);
 			f.GetComponent<Fire> ().InitMe (d);
 		}
 	}
 
 	void ParseData(string wwwtext)
 	{
+		deathLocations = new List<DeathLocation> ();
 		string[] entries = wwwtext.Split('\n');
 		foreach (string s in entries) {
 			string[] entryvals = s.Split (',');
 			if (entryvals.Length > 1) {
 				if (entryvals [3] == "") //icon
 					entryvals [3] = "0";
-				deathLocations.Add(new DeathLocation(float.Parse(entryvals[0]), float.Parse(entryvals[1]), entryvals[2], System.Int32.Parse(entryvals[3]), entryvals[4]));
+				int team = System.Int32.Parse (entryvals [5]);
+				deathLocations.Add(new DeathLocation(float.Parse(entryvals[0]), float.Parse(entryvals[1]), entryvals[2], System.Int32.Parse(entryvals[3]), team, entryvals[4]));
 			}
 		}
 	}

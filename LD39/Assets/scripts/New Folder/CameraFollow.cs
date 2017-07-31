@@ -17,7 +17,9 @@ public class CameraFollow : MonoBehaviour
 	void Awake ()
 	{
 		// Setting up the reference.
-		player = GameObject.FindGameObjectWithTag("Player").transform;
+		GameObject playerGO= GameObject.FindGameObjectWithTag("Player");
+		if (playerGO != null)
+			player = playerGO.transform;
 	}
 
 
@@ -37,7 +39,13 @@ public class CameraFollow : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		TrackPlayer();
+		if (!player) {
+			GameObject playerGO = GameObject.FindGameObjectWithTag ("Player");
+			if (playerGO != null)
+				player = playerGO.transform;
+		}
+		else
+			TrackPlayer();
 	}
 	
 	
@@ -48,20 +56,20 @@ public class CameraFollow : MonoBehaviour
 		float targetY = transform.position.y;
 
 		// If the player has moved beyond the x margin...
-		if(CheckXMargin())
-			// ... the target x coordinate should be a Lerp between the camera's current x position and the player's current x position.
-			targetX = Mathf.Lerp(transform.position.x, player.position.x, xSmooth * Time.deltaTime);
+		if (CheckXMargin ())
+		// ... the target x coordinate should be a Lerp between the camera's current x position and the player's current x position.
+		targetX = Mathf.Lerp (transform.position.x, player.position.x, xSmooth * Time.deltaTime);
 
 		// If the player has moved beyond the y margin...
-		if(CheckYMargin())
-			// ... the target y coordinate should be a Lerp between the camera's current y position and the player's current y position.
-			targetY = Mathf.Lerp(transform.position.y, player.position.y, ySmooth * Time.deltaTime);
+		if (CheckYMargin ())
+		// ... the target y coordinate should be a Lerp between the camera's current y position and the player's current y position.
+		targetY = Mathf.Lerp (transform.position.y, player.position.y, ySmooth * Time.deltaTime);
 
 		// The target x and y coordinates should not be larger than the maximum or smaller than the minimum.
 		//targetX = Mathf.Clamp(targetX, minXAndY.x, maxXAndY.x);
 		//targetY = Mathf.Clamp(targetY, minXAndY.y, maxXAndY.y);
 
 		// Set the camera's position to the target position with the same z component.
-		transform.position = new Vector3(targetX, targetY, transform.position.z);
+		transform.position = new Vector3 (targetX, targetY, transform.position.z);
 	}
 }

@@ -1,20 +1,29 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\DeathCanvas.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\PlayerControl.cs">
     <Files>
-      <File FileName="Assets\scripts\LevelSpawner.cs" Line="101" Column="36" />
-      <File FileName="Assets\scripts\New Folder\HealthPickup.cs" Line="21" Column="2" />
-      <File FileName="Assets\scripts\New Folder\PlayerHealth.cs" Line="122" Column="26" />
-      <File FileName="Assets\scripts\ToNextSceneButtonScript.cs" Line="23" Column="32" />
-      <File FileName="Assets\scripts\New Folder\LayBombs.cs" Line="19" Column="1" />
-      <File FileName="Assets\scripts\New Folder\CameraFollow.cs" Line="62" Column="5" />
-      <File FileName="Assets\scripts\New Folder\Pauser.cs" Line="20" Column="1" />
-      <File FileName="Assets\scripts\staticVarScript.cs" Line="5" Column="39" />
-      <File FileName="Assets\scripts\PlayerControl.cs" Line="33" Column="2" />
-      <File FileName="Assets\scripts\DeathLocation.cs" Line="18" Column="1" />
-      <File FileName="Assets\Flicker.cs" Line="7" Column="1" />
-      <File FileName="Assets\Fire.cs" Line="10" Column="14" />
-      <File FileName="Assets\DeathCanvas.cs" Line="11" Column="2" />
+      <File FileName="Assets\scripts\LevelSpawner.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\HealthPickup.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\PixelPickup.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\PlayerHealth.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\PlayerControl.cs" Line="51" Column="22" />
+      <File FileName="Assets\scripts\ToNextSceneButtonScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\CameraFollow.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\Pauser.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\staticVarScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\DeathLocation.cs" Line="1" Column="1" />
+      <File FileName="Assets\Flicker.cs" Line="1" Column="1" />
+      <File FileName="Assets\Fire.cs" Line="1" Column="1" />
+      <File FileName="Assets\DeathCanvas.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\New Folder\Score.cs" Line="1" Column="1" />
+      <File FileName="Assets\PanUpAndFade.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\MasterServer\Master.cs" Line="1" Column="1" />
+      <File FileName="Assets\AutoJoin.cs" Line="1" Column="1" />
+      <File FileName="Assets\RotateFree.cs" Line="1" Column="1" />
+      <File FileName="Assets\ServerPixelHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\MyHud.cs" Line="11" Column="24" />
+      <File FileName="Assets\RespawnHandler.cs" Line="54" Column="1" />
+      <File FileName="Assets\ClientSpawner.cs" Line="35" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

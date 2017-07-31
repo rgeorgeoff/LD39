@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4719706369735814}
   - component: {fileID: 212662380804618452}
   m_Layer: 11
-  m_Name: New Sprite
+  m_Name: FireSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,8 +117,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1552655109871460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.39, y: 4.54, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.84, y: 1.92, z: -3.19}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 4397765531393884}
   m_RootOrder: 2
@@ -230,15 +230,15 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1552655109871460}
-  m_Text: Hello World
+  m_Text: "Hello World\nasdfa dfsffes sdfasdf \nasdf \nsdfdsfasdfasdfasdfa"
   m_OffsetZ: 0
-  m_CharacterSize: 1
+  m_CharacterSize: 1.4
   m_LineSpacing: 1
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 0
-  m_FontStyle: 0
+  m_FontSize: 30
+  m_FontStyle: 2
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
@@ -331,6 +331,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 1552655109871460}
+  bonesSR: {fileID: 212731479746312982}
+  fireSR: {fileID: 212662380804618452}
+  hp: {fileID: 114092060480446326}
 --- !u!198 &198075486470923588
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -3678,7 +3681,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 505e7d9cb9fd14a45bdd00f6282fa528, type: 3}
-  m_Color: {r: 0.9411765, g: 0.903, b: 0.1314879, a: 1}
+  m_Color: {r: 1, g: 0.97794116, b: 0.98240435, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3720,7 +3723,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300012, guid: f1df49d69e7f28040b72d6f3198d5f16, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.99264705, g: 0.99264705, b: 0.99264705, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
