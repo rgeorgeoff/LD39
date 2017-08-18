@@ -1,6 +1,6 @@
 ﻿public static class StaticVarScript {
 
-	public static string url = "http://ec2-54-210-209-224.compute-1.amazonaws.com/";
+	public static string url = "http://localhost/LD39/";
 
 	public static string name = "player";
 

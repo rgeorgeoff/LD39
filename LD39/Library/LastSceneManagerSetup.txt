@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/scenes/Level 2.unity
+- path: Assets/scenes/InfoScreen.unity
   isLoaded: 1
   isActive: 1
